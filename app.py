@@ -4,8 +4,8 @@ from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
-from forms import UserAddForm, LoginForm, MessageForm, ProfileEditForm
-from models import db, connect_db, User, Message, Likes
+# from forms import UserAddForm, LoginForm, MessageForm, ProfileEditForm
+from models import db, connect_db #, User, Message, Likes
 
 CURR_USER_KEY = "curr_user"
 
@@ -34,7 +34,7 @@ debug = DebugToolbarExtension(app)
 def root():
     """Homepage."""
 
-    return redirect("/")
+    return render_template("index.html")
 
 
 
