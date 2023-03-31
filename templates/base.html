@@ -10,15 +10,32 @@
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-  <a class="navbar-brand" href="/">Home</a>
+  <div class="container-fluid">
+    <div class="navbar-header">
+  <a class="navbar-brand" href="/">SPORKY</a>
+  </div>
   <ul class="navbar-nav">
-    <!-- <li class="nav-item"><a class="nav-link" href="/playlists">Playlists</a></li>
-    <li class="nav-item"><a class="nav-link" href="/songs">Songs</a></li> -->
+    {% if not g.user %}
+    <div>
+    <li><a href="/signup">Sign up </a>  </li>
+    </div><br>
+    <li><a href="/login">Log in</a></li>
+    {% else %}
+    <div>
+    <li><p>{{g.user.username}} is loged in </p>  </li>
+    </div><br>
+    <li><a href="/logout">Log out</a></li>
+    {% endif %}
   </ul>
+  </div>
 </nav>
 
 
 <div class="container">
+  {% for category, message in get_flashed_messages(with_categories=True) %}
+  <div class="alert alert-{{ category }}">{{ message }}</div>
+  {% endfor %}
+  
 {% block content %}
 {% endblock %}
 </div>
