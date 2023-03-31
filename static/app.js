@@ -15,24 +15,36 @@ $res_area.on("click", function (evt) {
   });
 
 async function getRecipeDetails(id) {
+    ingredients_list = [];
     const response = await axios.get(
         `${RECIPE_URL}/${id}/information?${KEY}`
         );
+    const detailed_response = await axios.get(
+        `${RECIPE_URL}/${id}/analyzedInstructions?${KEY}`
+        );
+    ingredients_list = response.data.extendedIngredients;
     console.log(response.data);
     $res_area.empty();
     $res_area.append(`<h2>${response.data.title}</h2>`);
-    $res_area.append(`<p>CATEGORIE(S) : ${response.data.cuisines}</p>`);
+    $res_area.append(`<p>CATEGORIES : ${response.data.cuisines}</p>`);
     $res_area.append(`<p>SUITABLE FOR : ${response.data.dishTypes}</p>`);
     $res_area.append(`<p>DIETS : ${response.data.diets}</p>`);
-    $res_area.append(`<p>READY IN : ${response.data.readyInMinutes} munutes</p>`);
+    $res_area.append(`<p>READY IN : ${response.data.readyInMinutes} minutes</p>`);
     $res_area.append(`<p>MAKES : ${response.data.servings} servings</p>`);
    
     $res_area.append(`<img src="${response.data.image}"><br>`);
     $res_area.append(`<p>${response.data.summary}</p>`);
     $res_area.append(`<p>${response.data.instructions}</p>`);
-    $res_area.append(`<p>${response.data.sourceUrl}</p>`);
+    $res_area.append(`<h3>INGREDIENTS : </h3>`);
+    $res_area.append(`<ul>`);
+    for (let i = 0; i < ingredients_list.length; i++) {
+        $res_area.append(`<li>${ingredients_list[i].original}</li>`);
+    }
+    $res_area.append(`</ul>`);
+    $res_area.append(`<br>`);
+    $res_area.append(`<a href="${response.data.sourceUrl}" target="_blank">Visit source</a>`);
     
-    $res_area.append(`<p>${response.data.sourceName}</p>`);
+    
     }
     
 
