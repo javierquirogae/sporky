@@ -8,6 +8,7 @@ const $GO_button = $("#GO");
 const $search_form = $("#search_form");
 const $rand_sug = $("#rand_sug");
 const $save_area = $("#save_div");
+const $liked_recipes = $("#liked_recipe_list");
 
 
 $res_area.on("click", function (evt) {
@@ -103,9 +104,7 @@ async function getRecipe(query, l=100) {
 async function getRnadRecipe() {
     const response = await axios.get(
         `${RECIPE_URL}/random?${KEY}&number=1`
-        );
-    console.log(response.data.recipes[0].title);
-    
+        );   
     $rand_sug.append(`<p
                         class="link"
                         id="${response.data.recipes[0].id}">
@@ -122,4 +121,33 @@ $rand_sug.on("click", function (evt) {
     getRecipeDetails(target.id);
   });
 
+function populateFavorites() {
+    let this_id = ''
+    let liked_recipe_ids = [];
+    $liked_recipes.children().each(async function () {
+        this_id = $(this).attr('id');
+        liked_recipe_ids.push(this_id);
+        $(this).append(` <div class="card-body" >
+                        <p class="card-text">
+                        ${await getRecipeTitle(this_id)}
+                        </p>
+                        </div>`);         
+    });
+    console.log(liked_recipe_ids)
+    return liked_recipe_ids;
+}
+
+async function getRecipeTitle(id) {
+    let title = '';
+    const response = await axios.get(
+        `${RECIPE_URL}/${id}/information?${KEY}`
+        );
+    title = response.data.title;
+    return title;
+}
+    
+
+
+
+populateFavorites();
 getRnadRecipe();

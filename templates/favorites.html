@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-
+    
+    <div id="liked_recipe_list">
+        <h1>My Favorites</h1>
+        {% for like in likes %}
+            <div class="card" id="{{like.recipe_id}}">
+               
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

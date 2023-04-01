@@ -15,9 +15,7 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="/">SPORKY</a>
     </div>
-    <div class="navbar-header">
-      <a class="navbar-brand" href="/favorites">My Favorites</a>
-    </div>
+   
   
     {% if not g.user %}
     <div class="navbar-header">
@@ -27,6 +25,9 @@
       <a class="navbar-brand" href="/login">Log in</a>
     </div>
     {% else %}
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/favorites">My Favorites</a>
+    </div>
     <div class="navbar-header">
       <a class="navbar-brand">{{g.user.username}} is loged in </a>
     </div>

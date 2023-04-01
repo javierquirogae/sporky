@@ -133,7 +133,7 @@ def signup():
 
     except IntegrityError:
         flash("Username already taken", 'danger')
-        return render_template('users/signup.html', form=form)
+        return render_template('signup.html', form=form)
 
     do_login(user)
 
@@ -141,12 +141,17 @@ def signup():
 
 
 
-@app.route('/save_recipe//<int:recipe_id>',methods=["GET"] )
+@app.route('/save_recipe/<int:recipe_id>',methods=["GET"])
 def save_recipe_form(recipe_id):
     form = Favorites()
     return render_template('save.html', form=form, recipe_id=recipe_id)
 
-@app.route('/save_recipe//<int:recipe_id>',methods=["POST"] )
+
+
+
+
+
+@app.route('/save_recipe/<int:recipe_id>',methods=["POST"] )
 def save_recipe(recipe_id):
     form = Favorites()
     Saved.add_like(
@@ -162,5 +167,18 @@ def save_recipe(recipe_id):
 
 @app.route('/favorites',methods=["GET"] )
 def show_favorites_list():
+    if g.user:
+        user = User.query.get_or_404(session[CURR_USER_KEY])
+        likes = (Saved
+                .query
+                .filter(Saved.user_id == user.id)
+                .limit(100)
+                .all())
+        for like in likes:
+            print(like.recipe_id)
+        return render_template('favorites.html', user=user, likes=likes)
+    else:
+        return redirect("/login")
     
-    return render_template('favorites.html')
+
+    
