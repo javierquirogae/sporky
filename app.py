@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
-from forms import RegisterForm, LoginForm
+from forms import RegisterForm, LoginForm, Favorites
 from models import db, connect_db, User, Saved
 
 CURR_USER_KEY = "curr_user"
@@ -138,3 +138,29 @@ def signup():
     do_login(user)
 
     return redirect("/")
+
+
+
+@app.route('/save_recipe//<int:recipe_id>',methods=["GET"] )
+def save_recipe_form(recipe_id):
+    form = Favorites()
+    return render_template('save.html', form=form, recipe_id=recipe_id)
+
+@app.route('/save_recipe//<int:recipe_id>',methods=["POST"] )
+def save_recipe(recipe_id):
+    form = Favorites()
+    Saved.add_like(
+        user_id=session[CURR_USER_KEY],
+        recipe_id=recipe_id,
+        used=form.used.data,
+        rating=form.rating.data,
+        notes=form.notes.data
+        )
+    db.session.commit()
+
+    return redirect("/favorites")
+
+@app.route('/favorites',methods=["GET"] )
+def show_favorites_list():
+    
+    return render_template('favorites.html')

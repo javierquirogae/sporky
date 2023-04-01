@@ -1,3 +1,5 @@
+'use strict';
+
 const KEY = 'apiKey=f513086da55b4ffbbb711aa83cdddd70';
 const RECIPE_URL = 'https://api.spoonacular.com/recipes';
 
@@ -5,6 +7,7 @@ const $res_area = $("#res");
 const $GO_button = $("#GO");
 const $search_form = $("#search_form");
 const $rand_sug = $("#rand_sug");
+const $save_area = $("#save_div");
 
 
 $res_area.on("click", function (evt) {
@@ -14,26 +17,36 @@ $res_area.on("click", function (evt) {
     getRecipeDetails(target.id);
   });
 
+$save_area.on("click", function (evt) {
+    let target = evt.target;
+    console.log(target.id);
+    window.location.href=`/save_recipe/${target.id}`;
+  });
+
 async function getRecipeDetails(id) {
-    ingredients_list = [];
+    let ingredients_list = [];
     const response = await axios.get(
         `${RECIPE_URL}/${id}/information?${KEY}`
         );
-    const detailed_response = await axios.get(
-        `${RECIPE_URL}/${id}/analyzedInstructions?${KEY}`
-        );
+    $save_area.append(`<a href="/save_recipe/${id}" id="${id}"><b>SAVE THIS RECIPE !</b></a><br>`);
     ingredients_list = response.data.extendedIngredients;
     console.log(response.data);
     $res_area.empty();
+    $res_area.append(`<div>`);
     $res_area.append(`<h2>${response.data.title}</h2>`);
-    $res_area.append(`<p>CATEGORIES : ${response.data.cuisines}</p>`);
-    $res_area.append(`<p>SUITABLE FOR : ${response.data.dishTypes}</p>`);
-    $res_area.append(`<p>DIETS : ${response.data.diets}</p>`);
-    $res_area.append(`<p>READY IN : ${response.data.readyInMinutes} minutes</p>`);
-    $res_area.append(`<p>MAKES : ${response.data.servings} servings</p>`);
+    
+    $res_area.append(`</div>`);
+    $res_area.append(`<p> </p>`);
+    $res_area.append(`<p><b>CATEGORIES</b> : ${response.data.cuisines}</p>`);
+    $res_area.append(`<p><b>SUITABLE FOR</b> : ${response.data.dishTypes}</p>`);
+    $res_area.append(`<p><b>DIETS</b> : ${response.data.diets}</p>`);
+    $res_area.append(`<p><b>READY IN</b> : ${response.data.readyInMinutes} minutes</p>`);
+    $res_area.append(`<p><b>MAKES</b> : ${response.data.servings} servings</p>`);
    
     $res_area.append(`<img src="${response.data.image}"><br>`);
+    $res_area.append(`<h3>SUMMARY : </h3>`);
     $res_area.append(`<p>${response.data.summary}</p>`);
+    $res_area.append(`<h3>DIRECTIONS : </h3>`);
     $res_area.append(`<p>${response.data.instructions}</p>`);
     $res_area.append(`<h3>INGREDIENTS : </h3>`);
     $res_area.append(`<ul>`);
@@ -59,7 +72,7 @@ $GO_button.on("click", function (event) {
 
 
 async function getRecipe(query, l=100) {
-
+    let loop_legth = 0;
     let id_array = [];
     let length = `number=${l}`;
     let q = `query=${query}`;
@@ -77,6 +90,7 @@ async function getRecipe(query, l=100) {
     for (let i = 0; i < loop_legth; i++) {
         console.log(response.data.results[i].title);
         $res_area.append(`<p
+                            class="link"
                             id="${response.data.results[i].id}">
                             ${response.data.results[i].title}</p>`);
         console.log(response.data.results[i].id);    
@@ -93,6 +107,7 @@ async function getRnadRecipe() {
     console.log(response.data.recipes[0].title);
     
     $rand_sug.append(`<p
+                        class="link"
                         id="${response.data.recipes[0].id}">
                         May I suggest you try, 
                         ${response.data.recipes[0].title}</p>`);

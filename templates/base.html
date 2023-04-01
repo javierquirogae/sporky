@@ -6,27 +6,35 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>SPORKY</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/lumen/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="static/style.css" />
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
   <div class="container-fluid">
     <div class="navbar-header">
-  <a class="navbar-brand" href="/">SPORKY</a>
-  </div>
-  <ul class="navbar-nav">
+      <a class="navbar-brand" href="/">SPORKY</a>
+    </div>
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/favorites">My Favorites</a>
+    </div>
+  
     {% if not g.user %}
-    <div>
-    <li><a href="/signup">Sign up </a>  </li>
-    </div><br>
-    <li><a href="/login">Log in</a></li>
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/signup">Sign up </a> 
+    </div>
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/login">Log in</a>
+    </div>
     {% else %}
-    <div>
-    <li><p>{{g.user.username}} is loged in </p>  </li>
-    </div><br>
-    <li><a href="/logout">Log out</a></li>
+    <div class="navbar-header">
+      <a class="navbar-brand">{{g.user.username}} is loged in </a>
+    </div>
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/logout">Log out</a>
+    </div>
     {% endif %}
-  </ul>
+  
   </div>
 </nav>
 
@@ -43,6 +51,7 @@
 <script src="https://unpkg.com/axios/dist/axios.js"></script>
 <script src="https://unpkg.com/lodash"></script>
 <script src="static/app.js"></script>
+
 
 </body>
 </html>

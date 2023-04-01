@@ -43,6 +43,18 @@ class Saved(db.Model):
         db.ForeignKey('users.id', ondelete='CASCADE'),
         nullable=False,
     )
+    @classmethod
+    def add_like(cls, recipe_id, used, rating, notes, user_id):
+        """Add a like to a recipe."""
+        save = Saved(
+            recipe_id=recipe_id,
+            used=used,
+            rating=rating,
+            notes=notes,
+            user_id=user_id,
+        )
+
+        db.session.add(save)
 
 class User(db.Model):
     """User in the system."""
