@@ -29,6 +29,7 @@ async function getRecipeDetails(id) {
     const response = await axios.get(
         `${RECIPE_URL}/${id}/information?${KEY}`
         );
+    $save_area.empty();
     $save_area.append(`<a href="/save_recipe/${id}" id="${id}"><b>SAVE THIS RECIPE !</b></a><br>`);
     ingredients_list = response.data.extendedIngredients;
     console.log(response.data);
@@ -44,18 +45,20 @@ async function getRecipeDetails(id) {
     $res_area.append(`<p><b>READY IN</b> : ${response.data.readyInMinutes} minutes</p>`);
     $res_area.append(`<p><b>MAKES</b> : ${response.data.servings} servings</p>`);
    
-    $res_area.append(`<img src="${response.data.image}"><br>`);
-    $res_area.append(`<h3>SUMMARY : </h3>`);
-    $res_area.append(`<p>${response.data.summary}</p>`);
+    $res_area.append(`<img src="${response.data.image}">`);
+    $res_area.append(`<p> </p>`);
+
     $res_area.append(`<h3>DIRECTIONS : </h3>`);
     $res_area.append(`<p>${response.data.instructions}</p>`);
+    $res_area.append(`<br>`);
+   
     $res_area.append(`<h3>INGREDIENTS : </h3>`);
     $res_area.append(`<ul>`);
     for (let i = 0; i < ingredients_list.length; i++) {
         $res_area.append(`<li>${ingredients_list[i].original}</li>`);
     }
     $res_area.append(`</ul>`);
-    $res_area.append(`<br>`);
+   
     $res_area.append(`<a href="${response.data.sourceUrl}" target="_blank">Visit source</a>`);
     
     
@@ -64,6 +67,7 @@ async function getRecipeDetails(id) {
 
 $GO_button.on("click", function (event) {
         event.preventDefault();
+        $save_area.empty();
         $res_area.empty();
         let search_term = $('#search_form input[name="search_term"]').val();
         console.log(search_term);
@@ -121,21 +125,20 @@ $rand_sug.on("click", function (evt) {
     getRecipeDetails(target.id);
   });
 
-function populateFavorites() {
-    let this_id = ''
-    let liked_recipe_ids = [];
-    $liked_recipes.children().each(async function () {
-        this_id = $(this).attr('id');
-        liked_recipe_ids.push(this_id);
-        $(this).append(` <div class="card-body" >
-                        <p class="card-text">
-                        ${await getRecipeTitle(this_id)}
+async function populateFavorites() {
+    await $liked_recipes.children().each(async function () {
+        $(this).append(` <div class="card-body" id="${$(this).attr('id')}">
+                        <p>
+                            ${await getRecipeTitle($(this).attr('id'))}
                         </p>
+                        <a href="/saved_recipe_detail/${$(this).attr('id')}" id="${$(this).attr('id')}">
+                            View Recipe
+                        </a>
                         </div>`);         
     });
-    console.log(liked_recipe_ids)
-    return liked_recipe_ids;
 }
+
+
 
 async function getRecipeTitle(id) {
     let title = '';
@@ -146,7 +149,11 @@ async function getRecipeTitle(id) {
     return title;
 }
     
-
+$liked_recipes.on("click", function (evt) {
+    let target = evt.target;
+    console.log(target.id);
+    window.location.href=`/saved_recipe_detail/${target.id}`;
+  });
 
 
 populateFavorites();

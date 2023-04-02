@@ -153,15 +153,29 @@ def save_recipe_form(recipe_id):
 
 @app.route('/save_recipe/<int:recipe_id>',methods=["POST"] )
 def save_recipe(recipe_id):
+    saved_id_list = []
+    user = User.query.get_or_404(session[CURR_USER_KEY])
     form = Favorites()
-    Saved.add_like(
-        user_id=session[CURR_USER_KEY],
-        recipe_id=recipe_id,
-        used=form.used.data,
-        rating=form.rating.data,
-        notes=form.notes.data
-        )
-    db.session.commit()
+    likes = (Saved
+                .query
+                .filter(Saved.user_id == user.id)
+                .limit(100)
+                .all())
+    for like in likes:
+        saved_id_list.append(like.recipe_id)
+    if recipe_id in saved_id_list:
+        flash("Recipe already saved", 'danger')
+        return redirect("/favorites")
+    else:
+        Saved.add_like(
+            user_id=session[CURR_USER_KEY],
+            recipe_id=recipe_id,
+            used=form.used.data,
+            rating=form.rating.data,
+            notes=form.notes.data
+            )
+        db.session.commit()
+        flash("Recipe saved", 'success')
 
     return redirect("/favorites")
 
@@ -181,4 +195,6 @@ def show_favorites_list():
         return redirect("/login")
     
 
-    
+@app.route('/saved_recipe_detail/<int:recipe_id>',methods=["GET"])
+def show_recipe_detail(recipe_id):
+    return render_template('detail.html', recipe_id=recipe_id)
