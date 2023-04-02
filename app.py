@@ -198,3 +198,12 @@ def show_favorites_list():
 @app.route('/saved_recipe_detail/<int:recipe_id>',methods=["GET"])
 def show_recipe_detail(recipe_id):
     return render_template('detail.html', recipe_id=recipe_id)
+
+
+@app.route('/delete_recipe/<int:recipe_id>',methods=["POST"] )
+def delete_recipe(recipe_id):
+    user = User.query.get_or_404(session[CURR_USER_KEY])
+    Saved.query.filter(Saved.recipe_id == recipe_id, Saved.user_id == user.id).delete()
+    db.session.commit()
+    flash("Recipe deleted", 'danger')
+    return redirect("/favorites")

@@ -19,7 +19,12 @@ async function getRecipeDetails(id) {
         `${RECIPE_URL}/${id}/information?${KEY}`
         );
     $delete_area.empty();
-    // $save_area.append(`<a href="/save_recipe/${id}" id="${id}"><b>SAVE THIS RECIPE !</b></a><br>`);
+    $delete_area.append(`<form method="POST" action="/delete_recipe/${id}">
+                            <button class="btn btn-outline-danger">
+                                DELETE_THIS RECIPE !
+                            </button>
+                        </form>`);
+    
     ingredients_list = response.data.extendedIngredients;
     console.log(response.data);
     $res_area.empty();
