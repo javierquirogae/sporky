@@ -1,6 +1,5 @@
 
 from app import app, db
-from models import User, Saved
 
 with app.app_context():
     db.drop_all()
