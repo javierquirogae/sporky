@@ -194,6 +194,8 @@ def show_favorites_list():
                 .all())
         for like in likes:
             print(like.recipe_id)
+            print(like.rating)
+            print(type(like.rating))
         return render_template('favorites.html', user=user, likes=likes)
     else:
         return redirect("/login")

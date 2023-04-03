@@ -6,7 +6,12 @@
         <h1>My Favorites</h1>
         {% for like in likes %}
             <div class="card" id="{{like.recipe_id}}">
-               
+                    {% for i in range(like.rating) %}
+                        &#9733;
+                    {% endfor %}  
+                    {% if like.used %}  
+                        <div class="check">&#x2713;</div>
+                    {% endif %}       
             </div>
         {% endfor %}
     </div>

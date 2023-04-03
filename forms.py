@@ -25,7 +25,7 @@ class Favorites(FlaskForm):
 
     # dropdown menu
     rating = SelectField('How would you rate this recipe? (if you have prepared it; if not, leave as 0))', 
-                         choices=[('0', '0'),('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')])
+                         choices=[(0, 0),(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)])
     notes = TextAreaField('(Optional) Notes')
 
    

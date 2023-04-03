@@ -9,3 +9,10 @@
     text-decoration: underline;
     color: red;
 }
+
+.check{
+    font-weight: 900;
+    size: 5rem;
+    color: green;
+}
+
