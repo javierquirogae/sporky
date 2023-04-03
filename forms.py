@@ -17,7 +17,7 @@ class LoginForm(FlaskForm):
     """Login form."""
 
     username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[Length(min=6)])
+    password = PasswordField('Password', validators=[Length(min=3)])
 
 class Favorites(FlaskForm):
     """Save recipe form."""
