@@ -9,7 +9,7 @@ class RegisterForm(FlaskForm):
 
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('E-mail', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[Length(min=6)])
+    password = PasswordField('Password', validators=[Length(min=3)])
     image_url = StringField('(Optional) Image URL')
 
 
