@@ -193,7 +193,10 @@ def show_favorites_list():
 
 @app.route('/saved_recipe_detail/<int:recipe_id>',methods=["GET"])
 def show_recipe_detail(recipe_id):
-    return render_template('detail.html', recipe_id=recipe_id)
+    if g.user:
+        return render_template('detail.html', recipe_id=recipe_id)
+    else:
+        return redirect("/login")
 
 
 @app.route('/delete_recipe/<int:recipe_id>',methods=["POST"] )
