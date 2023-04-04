@@ -174,6 +174,7 @@ def save_recipe(recipe_id):
 
 @app.route('/favorites',methods=["GET"] )
 def show_favorites_list():
+    count = 0
     if g.user:
         user = User.query.get_or_404(session[CURR_USER_KEY])
         likes = (Saved
@@ -181,11 +182,12 @@ def show_favorites_list():
                 .filter(Saved.user_id == user.id)
                 .limit(100)
                 .all())
+        count = len(likes)
         for like in likes:
             print(like.recipe_id)
             print(like.rating)
             print(type(like.rating))
-        return render_template('favorites.html', user=user, likes=likes)
+        return render_template('favorites.html', user=user, likes=likes, count=count)
     else:
         return redirect("/login")
     
