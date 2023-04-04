@@ -12,7 +12,7 @@ The app was built using the following technologies:
 * Axios
 * Spoonacular API
 
-The site is deployed using HEROKU here : https://sporky1.herokuapp.com/login
+The site is deployed using HEROKU here : https://sporky1.herokuapp.com
 
 This is the link to the DB schema <br/>
 https://docs.google.com/document/d/1bXMtMfuemwypBlg9P6XpkJSpH_T7KdvDts8RZgjf9ys/edit?usp=sharing
