@@ -30,7 +30,12 @@ async function getRecipeDetails(id) {
         `${RECIPE_URL}/${id}/information?${KEY}`
         );
     $save_area.empty();
-    $save_area.append(`<a href="/save_recipe/${id}" id="${id}"><b>SAVE THIS RECIPE !</b></a><br>`);
+    
+    $save_area.append(` <form method="POST" action="/save_recipe/${id}">
+                            <button class="btn btn-outline-success">
+                                add to favorites
+                            </button>
+                        </form>`);
     ingredients_list = response.data.extendedIngredients;
     console.log(response.data);
     $res_area.empty();
@@ -126,15 +131,15 @@ $rand_sug.on("click", function (evt) {
   });
 
 async function populateFavorites() {
-    await $liked_recipes.children().each(async function () {
-        $(this).append(` <div class="card-body" id="${$(this).attr('id')}">
-                        <p>
+    await $liked_recipes.children().children().each(async function () {
+        $(this).append(` 
+                        <h3>
                             ${await getRecipeTitle($(this).attr('id'))}
-                        </p>
+                        </h3>
                         <a href="/saved_recipe_detail/${$(this).attr('id')}" id="${$(this).attr('id')}">
                             View Recipe
                         </a>
-                        </div>`);         
+                        `);         
     });
 }
 
@@ -149,7 +154,7 @@ async function getRecipeTitle(id) {
     return title;
 }
     
-$liked_recipes.on("click", function (evt) {
+$('a').on("click", function (evt) {
     let target = evt.target;
     console.log(target.id);
     window.location.href=`/saved_recipe_detail/${target.id}`;

@@ -5,14 +5,34 @@
     <div id="liked_recipe_list">
         <h1>My Favorites</h1>
         {% for like in likes %}
-            <div class="card" id="{{like.recipe_id}}">
+            <div class="card" >
+                <div class="card-body" id="{{like.recipe_id}}" >
+                
+                {% if like.used %}  
+                <span class="check">
+                I have made this recipe : &#x2713; 
+                </span>
+                <span class="star">
+                My rating : 
                     {% for i in range(like.rating) %}
-                        &#9733;
-                    {% endfor %}  
-                    {% if like.used %}  
-                        <div class="check">&#x2713;</div>
-                    {% endif %}     
-                        <p><i>{{like.notes}}</i></p>  
+                    &#9733;
+                    {% endfor %} 
+                </span> 
+                {% endif %}  
+                 {% if like.notes %}
+                <span><i>  {{like.notes}}</i></span> 
+                {% endif %}
+                </div>
+                <form method="GET" action="/edit_recipe/{{like.recipe_id}}">
+                    <button class="btn btn-outline-primary">
+                        add/change my input
+                    </button>
+                </form>
+                <form method="POST" action="/delete_recipe/{{like.recipe_id}}">
+                    <button class="btn btn-outline-warning">
+                        remove from favorites
+                    </button>
+                </form>
             </div>
         {% endfor %}
     </div>

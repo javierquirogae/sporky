@@ -144,17 +144,6 @@ def signup():
     return redirect("/")
 
 
-
-@app.route('/save_recipe/<int:recipe_id>',methods=["GET"])
-def save_recipe_form(recipe_id):
-    form = Favorites()
-    return render_template('save.html', form=form, recipe_id=recipe_id)
-
-
-
-
-
-
 @app.route('/save_recipe/<int:recipe_id>',methods=["POST"] )
 def save_recipe(recipe_id):
     saved_id_list = []
@@ -168,7 +157,7 @@ def save_recipe(recipe_id):
     for like in likes:
         saved_id_list.append(like.recipe_id)
     if recipe_id in saved_id_list:
-        flash("Recipe already saved", 'danger')
+        flash("Recipe was already in favorites list !", 'danger')
         return redirect("/favorites")
     else:
         Saved.add_like(
@@ -179,7 +168,7 @@ def save_recipe(recipe_id):
             notes=form.notes.data
             )
         db.session.commit()
-        flash("Recipe saved", 'success')
+        flash("Recipe added to favorites", 'warning')
 
     return redirect("/favorites")
 
@@ -211,5 +200,28 @@ def delete_recipe(recipe_id):
     user = User.query.get_or_404(session[CURR_USER_KEY])
     Saved.query.filter(Saved.recipe_id == recipe_id, Saved.user_id == user.id).delete()
     db.session.commit()
-    flash("Recipe deleted", 'danger')
+    flash("Recipe removed from favorites", 'warning')
+    return redirect("/favorites")
+
+
+@app.route('/edit_recipe/<int:recipe_id>',methods=["get"] )
+def edit_recipe_form(recipe_id):
+    user = User.query.get_or_404(session[CURR_USER_KEY])
+    saved_recipe = Saved.query.filter(Saved.recipe_id == recipe_id, Saved.user_id == user.id).first()
+    form = Favorites(obj=saved_recipe)
+    
+    return render_template('edit.html', form=form, saved_recipe=saved_recipe)
+
+
+@app.route('/edit_recipe/<int:recipe_id>',methods=["POST"] )
+def edit_recipe(recipe_id):
+    user = User.query.get_or_404(session[CURR_USER_KEY])
+    recipe = Saved.query.filter(Saved.recipe_id == recipe_id, Saved.user_id == user.id).first()
+    form = Favorites(obj=recipe)
+    recipe.used = form.used.data
+    recipe.rating = form.rating.data
+    recipe.notes = form.notes.data
+
+    db.session.commit()
+    flash("Recipe edited", 'info')
     return redirect("/favorites")

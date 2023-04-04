@@ -5,26 +5,13 @@ const RECIPE_URL = 'https://api.spoonacular.com/recipes';
 
 const $res_area = $("#res");
 const $detail = $('h2');
-const $delete_area = $('#delete_div');
 
-$delete_area.on("click", function (evt) {
-    let target = evt.target;
-    console.log(target.id);
-    window.location.href=`/save_recipe/${target.id}`;
-  });
 
 async function getRecipeDetails(id) {
     let ingredients_list = [];
     const response = await axios.get(
         `${RECIPE_URL}/${id}/information?${KEY}`
-        );
-    $delete_area.empty();
-    $delete_area.append(`<form method="POST" action="/delete_recipe/${id}">
-                            <button class="btn btn-outline-danger">
-                                DELETE_THIS RECIPE !
-                            </button>
-                        </form>`);
-    
+        );    
     ingredients_list = response.data.extendedIngredients;
     console.log(response.data);
     $res_area.empty();
