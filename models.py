@@ -102,7 +102,7 @@ class User(db.Model):
         return Saved.query.filter_by(user_id=self.id).all()
 
     @classmethod
-    def signup(cls, username, email, password, image_url):
+    def signup(cls, username, email, password):
         """Sign up user.
         Hashes password and adds user to system.
         """
@@ -113,7 +113,6 @@ class User(db.Model):
             username=username,
             email=email,
             password=hashed_pwd,
-            image_url=image_url,
         )
 
         db.session.add(user)
